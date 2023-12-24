@@ -1,0 +1,15 @@
+---
+triple:          'x86_64-apple-darwin'
+binary-path:     source
+relocations:
+  - { offsetInCU: 0x26, offset: 0x26, size: 0x8, addend: 0x0, symName: _compare_f, symObjAddr: 0x0, symBinAddr: 0x100002A70, symSize: 0x30 }
+  - { offsetInCU: 0x76, offset: 0x76, size: 0x8, addend: 0x0, symName: _compare_f, symObjAddr: 0x0, symBinAddr: 0x100002A70, symSize: 0x30 }
+  - { offsetInCU: 0xAC, offset: 0xAC, size: 0x8, addend: 0x0, symName: _draw_rectangle, symObjAddr: 0x30, symBinAddr: 0x100002AA0, symSize: 0x180 }
+  - { offsetInCU: 0x160, offset: 0x160, size: 0x8, addend: 0x0, symName: _draw_circle, symObjAddr: 0x1B0, symBinAddr: 0x100002C20, symSize: 0x200 }
+  - { offsetInCU: 0x27B, offset: 0x27B, size: 0x8, addend: 0x0, symName: _is_between, symObjAddr: 0x3B0, symBinAddr: 0x100002E20, symSize: 0x80 }
+  - { offsetInCU: 0x2BF, offset: 0x2BF, size: 0x8, addend: 0x0, symName: _draw_line_in_a_better_way, symObjAddr: 0x430, symBinAddr: 0x100002EA0, symSize: 0x2F0 }
+  - { offsetInCU: 0x4A5, offset: 0x4A5, size: 0x8, addend: 0x0, symName: _draw_triangle_in_a_better_way, symObjAddr: 0x720, symBinAddr: 0x100003190, symSize: 0x550 }
+  - { offsetInCU: 0x683, offset: 0x683, size: 0x8, addend: 0x0, symName: _draw_triangle, symObjAddr: 0xC70, symBinAddr: 0x1000036E0, symSize: 0x190 }
+  - { offsetInCU: 0x738, offset: 0x738, size: 0x8, addend: 0x0, symName: _draw_dots, symObjAddr: 0xE00, symBinAddr: 0x100003870, symSize: 0x160 }
+  - { offsetInCU: 0x824, offset: 0x824, size: 0x8, addend: 0x0, symName: _main, symObjAddr: 0xF60, symBinAddr: 0x1000039D0, symSize: 0x43B }
+...

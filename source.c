@@ -188,22 +188,40 @@ int draw_rectangle_with_texture(Texture *t, int w, int h, char *output_filename)
 
   int byte_per_pixel = t->num_of_bits_per_pixel/8;
 
-  int len = t->width * t->height*3;
+  int len = w * h * 3;
   char buf[len];
-  for (int i  = 0; i < len; i+=3) {
-    int y_offset = t->height -  (i/3)/(t->height) - 1;
-    
-    int x_offset = (i/3) % t->width;
 
-    int offset = x_offset + y_offset*t->width;
-    offset*=3;
-   
-    buf[i] = t->pixels[offset];
-    buf[i+1] = t->pixels[offset +1];
-    buf[i+2] = t->pixels[offset +2];
+  for(int j = 0; j<h; j++) {
+    for(int i = 0; i<w; i++) {
+      int x_offset = i;
+      int y_offset = t->height - j - 1;
+
+      int offset = x_offset + y_offset*t->width;
+      offset *= 3;
+
+      int buf_offset = (i + j * w)*3;
+      
+      buf[buf_offset] = t->pixels[offset];
+      buf[buf_offset + 1] = t->pixels[offset +1];
+      buf[buf_offset + 2] = t->pixels[offset +2];
+    }
   }
 
-  for(int i=0; i<t->width * t->height*3; i+=3) {
+  
+  /* for (int i  = 0; i < len; i+=3) { */
+  /*   int y_offset = (t->height -  (i/3)/(t->height) - 1); */
+    
+  /*   int x_offset = ((i/3) % t->width); */
+
+  /*   int offset = x_offset + y_offset*w; */
+  /*   offset*=3; */
+   
+  /*   buf[i] = t->pixels[offset]; */
+  /*   buf[i+1] = t->pixels[offset +1]; */
+  /*   buf[i+2] = t->pixels[offset +2]; */
+  /* } */
+
+  for(int i=0; i< w * h *3; i+=3) {
     fwrite(buf + i, 3, 1, file);
   }
   
@@ -490,6 +508,8 @@ int main() {
   }
 
   draw_rectangle_with_texture(texture, 100, 100, "rectangle_with_texture_smaller.ppm");
+
+  draw_rectangle_with_texture(texture, 200, 100, "rectangle_with_texture_3.ppm");
 
   return 0;
 

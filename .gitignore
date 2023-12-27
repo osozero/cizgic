@@ -1,1 +1,6 @@
-./source.dSYM/
+source.dSYM/
+.DS_Store
+*.ppm
+*~
+*#
+

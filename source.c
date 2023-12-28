@@ -24,11 +24,6 @@ typedef struct {
 } Texture;
 
 
-enum TextureWrappingMode {
-  REPEAT,
-  INTERPOLATED
-};
-
 int draw_triangle(size_t * pixels, int w, int h,Point *p1, Point *p2, Point *p3, int color, char * output_filename);
 
 int compare_f(const void *p1, const void *p2) {

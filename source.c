@@ -8,13 +8,11 @@
 #include <stddef.h>
 #include <string.h>
 
-#define WIDTH 100
-#define HEIGHT 100
-
 typedef struct {
   float x;
   float  y;
 } Point;
+
 
 typedef struct {
   int width;
@@ -24,6 +22,12 @@ typedef struct {
   // format of pixels is bottom to up while ppm file format is top to bottom.
   char * pixels;
 } Texture;
+
+
+enum TextureWrappingMode {
+  REPEAT,
+  INTERPOLATED
+};
 
 int draw_triangle(size_t * pixels, int w, int h,Point *p1, Point *p2, Point *p3, int color, char * output_filename);
 
@@ -176,6 +180,52 @@ int save_texture_as_ppm(Texture *t, char* output_filename) {
 
 }
 
+int draw_rectangle_with_interpolated_texture(Texture *t, int w, int h, char *output_filename) {
+  FILE* file = fopen(output_filename, "wb");
+  if (file == NULL){
+    printf("error opening file\n");
+    return -1;
+  }
+  
+  fprintf(file, "P6\n%d %d\n%d\n", w, h, 255);
+
+  int byte_per_pixel = t->num_of_bits_per_pixel/8;
+
+  int len = w * h * 3;
+  char buf[len];
+
+  float x_interpolation_rate = (float)t->width/(float)w;
+  float y_interpolation_rate = (float)t->height/(float)h;
+  
+  for(int j = 0; j<h; j++) {
+    for(int i = 0; i<w; i++) {
+      int x_offset = i * x_interpolation_rate;
+      int y_offset = t->height - (j * y_interpolation_rate) - 1;
+
+      int offset = x_offset + y_offset*t->width;
+      offset *= 3;
+
+      int buf_offset = (i + j * w)*3;
+      
+      buf[buf_offset] = t->pixels[offset];
+      buf[buf_offset + 1] = t->pixels[offset +1];
+      buf[buf_offset + 2] = t->pixels[offset +2];
+    }
+  }
+
+  for(int i=0; i< w * h *3; i+=3) {
+    fwrite(buf + i, 3, 1, file);
+  }
+  
+  fclose(file);
+
+
+  return 0;
+
+}
+
+
+// @Feature: Add feature for interpolated texture coordinates with texture mode.
 int draw_rectangle_with_texture(Texture *t, int w, int h, char *output_filename) {
   FILE* file = fopen(output_filename, "wb");
   if (file == NULL){
@@ -193,8 +243,8 @@ int draw_rectangle_with_texture(Texture *t, int w, int h, char *output_filename)
 
   for(int j = 0; j<h; j++) {
     for(int i = 0; i<w; i++) {
-      int x_offset = i;
-      int y_offset = t->height - j - 1;
+      int x_offset = i%t->width;
+      int y_offset = t->height - (j % t->height) - 1;
 
       int offset = x_offset + y_offset*t->width;
       offset *= 3;
@@ -498,6 +548,9 @@ int draw_dots(size_t * pixels, int w, int h, int x1, int y1, int x2, int y2, int
 }
 
 int main() {
+
+  enum TextureWrappingMode tex_mode = INTERPOLATED;
+  
   Texture * texture  = load_texture("/Users/oso/Desktop/texture_mapping/bmp_24.bmp");
   if (!texture) {
 
@@ -509,8 +562,13 @@ int main() {
 
   draw_rectangle_with_texture(texture, 100, 100, "rectangle_with_texture_smaller.ppm");
 
-  draw_rectangle_with_texture(texture, 200, 100, "rectangle_with_texture_3.ppm");
+  draw_rectangle_with_texture(texture, 200, 100, "rectangle_with_texture_smaller_than_texture.ppm");
 
+  draw_rectangle_with_texture(texture, 400, 400, "rectangle_with_texture_bigger_than_texture.ppm");
+
+  draw_rectangle_with_interpolated_texture(texture, 400, 800, "rectangle_with_interpolated_texture.ppm");
+  
+  
   return 0;
 
   // Note that os x is  little indian so 0x000000ff is kept in memory as 0xff000000

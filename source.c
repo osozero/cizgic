@@ -94,9 +94,9 @@ Texture* load_texture(char* image_path) {
   size_t index = 0;
   int curr = image_pixel_offset;
   
-  while(curr-image_pixel_offset <= total_size_of_pixels_data) {
+  while(curr-image_pixel_offset < total_size_of_pixels_data) {
     int padding = 0;
-    for (int i = 0; i < width_of_pixels * (num_of_bits_per_pixel/8); i+=3 ) {
+     for (int i = 0; i < width_of_pixels * (num_of_bits_per_pixel/8); i+=3 ) {
       // Pixel format in BMP is little endian so red is kept as 00 00 FF
       pixels[index+2] = *(buffer+curr);
       pixels[index+1] = *(buffer+curr+1);
@@ -219,8 +219,6 @@ int draw_rectangle_with_interpolated_texture(Texture *t, int w, int h, char *out
 
 }
 
-
-// @Feature: Add feature for interpolated texture coordinates with texture mode.
 int draw_rectangle_with_texture(Texture *t, int w, int h, char *output_filename) {
   FILE* file = fopen(output_filename, "wb");
   if (file == NULL){
@@ -544,9 +542,7 @@ int draw_dots(size_t * pixels, int w, int h, int x1, int y1, int x2, int y2, int
 
 int main() {
 
-  enum TextureWrappingMode tex_mode = INTERPOLATED;
-  
-  Texture * texture  = load_texture("/Users/oso/Desktop/texture_mapping/bmp_24.bmp");
+  Texture * texture  = load_texture("/Users/oso/Desktop/texture_mapping/wall.bmp");
   if (!texture) {
 
     printf("errrrrrrrrr\n");
